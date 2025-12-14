@@ -14,3 +14,9 @@ type Task struct {
 	CreatedAt	time.Time	`json:"createdAt" db:"created_at"`
 	UpdatedAt	time.Time	`json:"updatedAt" db:"updated_at"`
 }
+
+// Alias for slice of lists
+type Tasks []Task
+
+// Alias for map of lists indexed by UUID
+type TasksMap map[string]Task

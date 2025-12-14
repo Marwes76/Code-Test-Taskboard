@@ -7,4 +7,20 @@ import { HttpService } from './http.service';
 export class TaskService {
 
 	constructor(private httpService: HttpService) {}
+
+	getTask(uuid: string): Observable<Task> {
+		return this.httpService.get<Task>(`tasks/${uuid}`);
+	}
+
+	createTask(task: Partial<Task>) {
+		return this.httpService.post<Task>('tasks', task);
+	}
+
+	updateTasks(tasks: { [uuid: string]: Task }) {
+		return this.httpService.put<{ [uuid: string]: Task }>(`tasks`, tasks);
+	}
+
+	deleteTask(uuid: string) {
+		return this.httpService.delete(`tasks/${uuid}`);
+	}
 }

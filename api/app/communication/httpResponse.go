@@ -30,8 +30,8 @@ func ResponseBadRequest(w http.ResponseWriter, err error) {
 }
 
 // 404 Not Found
-func ResponseNotFound(w http.ResponseWriter, err error) {
-	ResponseErrorJson(w, http.StatusNotFound, err)
+func ResponseNotFound(w http.ResponseWriter) {
+	ResponseErrorJson(w, http.StatusNotFound, nil)
 }
 
 // 500 Internal Server Error
@@ -53,7 +53,11 @@ func ResponseJson(w http.ResponseWriter, status int, payload interface{}) {
 }
 
 func ResponseErrorJson(w http.ResponseWriter, status int, err error) {
-	ResponseJson(w, status, ErrorResponse{
-		Error:	err.Error(),
-	})
+	if err != nil {
+		ResponseJson(w, status, ErrorResponse{
+			Error:	err.Error(),
+		})
+	} else {
+		ResponseJson(w, status, nil)
+	}
 }

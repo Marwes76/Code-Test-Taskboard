@@ -11,4 +11,20 @@ export class ListService {
 	getAllLists(): Observable<List[]> {
 		return this.httpService.get<List[]>('lists');
 	}
+
+	getList(uuid: string): Observable<List> {
+		return this.httpService.get<List>(`lists/${uuid}`);
+	}
+
+	createList(list: Partial<List>) {
+		return this.httpService.post<List>('lists', list);
+	}
+
+	updateLists(lists: { [uuid: string]: List }) {
+		return this.httpService.put<{ [uuid: string]: List }>(`lists`, lists);
+	}
+
+	deleteList(uuid: string) {
+		return this.httpService.delete(`lists/${uuid}`);
+	}
 }

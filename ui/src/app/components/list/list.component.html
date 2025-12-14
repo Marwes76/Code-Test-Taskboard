@@ -1,9 +1,103 @@
 <div class="list">
 
-	<h3>{{ list.title }}</h3>
+	<div *ngIf="editState.isLocked() || editState.isDefault()">
+		<div style="align-items: center; display: flex;">
+			<button
+				(click)="onMoveUp()"
+				[disabled]="index == 0"
+				matButton="filled"
+				style="margin-right: auto;">
+				<mat-icon>arrow_back</mat-icon>
+			</button>
+			<h3 style="text-align: center;">
+				{{ list.title }}
+			</h3>
+			<button
+				(click)="onMoveDown()"
+				[disabled]="index >= lastIndex"
+				matButton="filled"
+				style="margin-left: auto;">
+				<mat-icon>arrow_forward</mat-icon>
+			</button>
+		</div>
 
-	<app-task
-		*ngFor="let task of list.tasks"
-		[task]="task">
-	</app-task>
+		<p style="margin-bottom: 2rem;">
+			{{ list.description }}
+		</p>
+
+		<app-task
+			*ngFor="let task of tasks | async; let i = index"
+			[index]="i"
+			[lastIndex]="lastTaskIndex"
+			[task]="task"
+			[listUuid]="list.uuid"
+			(moveUp)="moveUpTaskAtIndex($event)"
+			(moveDown)="moveDownTaskAtIndex($event)"
+			(update)="updateTaskAtIndex($event.index, $event.task)"
+			(delete)="deleteTaskAtIndex($event)">
+		</app-task>
+
+		<div
+			class="task"
+			style="cursor: pointer;"
+			(click)="onAddTask()"
+			*ngIf="!editState.isNew()">
+			<div style="display: flex; justify-content: center; height: 100%;">
+				<mat-icon style="transform: scale(2);">add</mat-icon>
+			</div>
+		</div>
+	</div>
+
+	<div *ngIf="!editState.isLocked() && !editState.isDefault()">
+		<form>
+			<mat-form-field style="width: 100%;">
+				<mat-label>Title</mat-label>
+				<input
+					matInput
+					name="title"
+					[(ngModel)]="editableList.title">
+			</mat-form-field>
+
+			<mat-form-field style="width: 100%;">
+				<mat-label>Description</mat-label>
+				<textarea
+					matInput
+					name="description"
+					[(ngModel)]="editableList.description">
+				</textarea>
+			</mat-form-field>
+		</form>
+	</div>
+
+	<div style="align-items: center; display: flex; margin-top: 1.5rem;">
+		<button
+			(click)="onEdit()"
+			[disabled]="editState.isLocked()"
+			matButton="filled"
+			*ngIf="editState.isDefault()">
+			Edit
+		</button>
+		<button
+			(click)="onSave()"
+			[disabled]="editState.isSaving()"
+			matButton="filled"
+			*ngIf="editState.isNew() || editState.isEditing() || editState.isSaving()">
+			Save
+		</button>
+		<button
+			(click)="onCancel()"
+			[disabled]="editState.isSaving()"
+			matButton="filled"
+			*ngIf="editState.isNew() || editState.isEditing() || editState.isSaving()">
+			Cancel
+		</button>
+		<button
+			(click)="onDelete()"
+			[disabled]="editState.isEditing() || editState.isSaving()"
+			matButton="filled"
+			*ngIf="!editState.isNew()"
+			style="margin-left: auto;">
+			<mat-icon>delete</mat-icon>
+		</button>
+	</div>
 </div>

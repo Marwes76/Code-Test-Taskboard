@@ -1,3 +1,65 @@
 <div class="task">
-	<strong>{{ task.title }}</strong>
+
+	<div *ngIf="editState.isLocked() || editState.isDefault()">
+		<div style="align-items: center; display: flex;">
+			<strong>{{ task.title }}</strong>
+		</div>
+
+		<p style="margin-bottom: 2rem;">
+			{{ task.description }}
+		</p>
+	</div>
+
+	<div *ngIf="!editState.isLocked() && !editState.isDefault()">
+		<form>
+			<mat-form-field style="width: 100%;">
+				<mat-label>Title</mat-label>
+				<input
+					matInput
+					name="title"
+					[(ngModel)]="editableTask.title">
+			</mat-form-field>
+
+			<mat-form-field style="width: 100%;">
+				<mat-label>Description</mat-label>
+				<textarea
+					matInput
+					name="description"
+					[(ngModel)]="editableTask.description">
+				</textarea>
+			</mat-form-field>
+		</form>
+	</div>
+
+	<div style="align-items: center; display: flex; margin-top: 1.5rem;">
+		<button
+			(click)="onEdit()"
+			[disabled]="editState.isLocked()"
+			matButton="filled"
+			*ngIf="editState.isDefault()">
+			Edit
+		</button>
+		<button
+			(click)="onSave()"
+			[disabled]="editState.isSaving()"
+			matButton="filled"
+			*ngIf="editState.isNew() || editState.isEditing() || editState.isSaving()">
+			Save
+		</button>
+		<button
+			(click)="onCancel()"
+			[disabled]="editState.isSaving()"
+			matButton="filled"
+			*ngIf="editState.isNew() || editState.isEditing() || editState.isSaving()">
+			Cancel
+		</button>
+		<button
+			(click)="onDelete()"
+			[disabled]="editState.isEditing() || editState.isSaving()"
+			matButton="filled"
+			*ngIf="!editState.isNew()"
+			style="margin-left: auto;">
+			<mat-icon>delete</mat-icon>
+		</button>
+	</div>
 </div>

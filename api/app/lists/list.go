@@ -23,6 +23,9 @@ type List struct {
 // Alias for slice of lists
 type Lists []List
 
+// Alias for map of lists indexed by UUID
+type ListsMap map[string]List
+
 // Load relation of tasks to a list
 func (list *List) LoadTasks(db *sqlx.DB) (err error) {
 	list.Tasks = []tasks.Task{}

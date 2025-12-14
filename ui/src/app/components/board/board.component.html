@@ -1,6 +1,21 @@
 <div class="board">
 	<app-list
-		*ngFor="let list of lists | async"
-		[list]="list">
+		*ngFor="let list of lists | async; let i = index"
+		[index]="i"
+		[lastIndex]="lastListIndex"
+		[list]="list"
+		(moveUp)="moveUpListAtIndex($event)"
+		(moveDown)="moveDownListAtIndex($event)"
+		(update)="updateListAtIndex($event.index, $event.list)"
+		(delete)="deleteListAtIndex($event)">
 	</app-list>
+
+	<div
+		class="list"
+		style="cursor: pointer;"
+		(click)="onAddList()">
+		<div style="align-items: center; display: flex; justify-content: center; height: 100%; min-height: 5rem;">
+			<mat-icon style="transform: scale(5);">add</mat-icon>
+		</div>
+	</div>
 </div>
