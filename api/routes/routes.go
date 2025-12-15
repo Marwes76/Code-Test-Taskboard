@@ -17,6 +17,7 @@ func InitRoutes(router *mux.Router) {
 
 	// Tasks
 	router.HandleFunc("/tasks/search", tasks.SearchTasksAPI).Methods("GET")
+	router.HandleFunc("/tasks/search/{searchString}", tasks.SearchTasksAPI).Methods("GET")
 	router.HandleFunc("/tasks/{uuid}", tasks.GetTaskAPI).Methods("GET")
 	router.HandleFunc("/tasks", tasks.CreateTaskAPI).Methods("POST")
 	router.HandleFunc("/tasks", tasks.UpdateTasksAPI).Methods("PUT")

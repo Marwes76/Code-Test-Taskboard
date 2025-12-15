@@ -8,9 +8,13 @@ export class TaskService {
 
 	constructor(private httpService: HttpService) {}
 
-	searchTasks(params: { [key: string]: string }): Observable<Task[]> {
+	searchTasks(searchString: string, params: { [key: string]: string }): Observable<Task[]> {
+		var url = "tasks/search";
+		if (searchString !== "") {
+			url += "/" + searchString;
+		}
 		const httpParams = this.httpService.getHttpParams(params);
-		return this.httpService.get<Task[]>(`tasks/search`, { params: httpParams });
+		return this.httpService.get<Task[]>(url, { params: httpParams });
 	}
 
 	getTask(uuid: string): Observable<Task> {

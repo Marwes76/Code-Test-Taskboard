@@ -26,6 +26,7 @@ func SearchTasksAPI(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var db *sqlx.DB
 	var tasks Tasks
+	searchString := mux.Vars(r)["searchString"]
 	listUuid := r.URL.Query().Get("listUuid")
 	orderBy := r.URL.Query().Get("orderBy")
 
@@ -54,6 +55,12 @@ func SearchTasksAPI(w http.ResponseWriter, r *http.Request) {
 	var query = "SELECT * FROM tasks"
 	var conditions []string
 	var args []interface{}
+	if searchString != "" {
+		conditions = append(conditions, "(title LIKE ? OR title LIKE ? OR title LIKE ?)")
+		args = append(args, searchString + "%")
+		args = append(args, "%" + searchString + "%")
+		args = append(args, "%" + searchString)
+	}
 	if listUuid != "" {
 		conditions = append(conditions, "list_uuid = ?")
 		args = append(args, listUuid)

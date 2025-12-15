@@ -46,6 +46,7 @@ export class ListComponent {
 	editableList!: List;
 	editState: EditState = EditState.DEFAULT;
 	orderBy: OrderBy = OrderBy.SORT_ORDER;
+	searchString: string = "";
 
 	private tasksSubject = new BehaviorSubject<Task[]>([]);
 	tasks: Observable<Task[]> = this.tasksSubject.asObservable();
@@ -66,6 +67,17 @@ export class ListComponent {
 		this.tasksSubject.next(tasks);
 	}
 
+	onSearchStringChange() {
+		this.onTaskSearch();
+	}
+
+	onSearchStringClear() {
+		if (this.searchString !== "") {
+			this.searchString = "";
+			this.onSearchStringChange();
+		}
+	}
+
 	onToggleTaskOrderBy() {
 		this.orderBy = OrderBy.toggleOrderBy(this.orderBy);
 		this.onTaskSearch();
@@ -76,7 +88,7 @@ export class ListComponent {
 			"listUuid": this.list.uuid,
 			"orderBy": this.orderBy.value,
 		};
-		this.taskService.searchTasks(params).subscribe({
+		this.taskService.searchTasks(this.searchString, params).subscribe({
 			next: (tasks: Task[]) => {
 				this.tasksSubject.next(tasks);
 			},

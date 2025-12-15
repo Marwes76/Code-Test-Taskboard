@@ -26,6 +26,22 @@
 		</p>
 
 		<div style="align-items: center; display: flex;">
+			<mat-form-field style="width: 50%;">
+				<mat-label>Search</mat-label>
+				<input
+					matInput
+					name="searchString"
+					[(ngModel)]="searchString"
+					(ngModelChange)="onSearchStringChange()">
+				<button
+					(click)="onSearchStringClear()"
+					matSuffix
+					matIconButton
+					*ngIf="searchString">
+					<mat-icon>close</mat-icon>
+    				</button>
+			</mat-form-field>
+
 			<button
 				(click)="onToggleTaskOrderBy()"
 				matButton="elevated"
