@@ -9,15 +9,15 @@ import (
 
 func InitRoutes(router *mux.Router) {
 	// Lists
-	router.HandleFunc("/api/lists", lists.GetAllListsAPI).Methods("GET")
-	router.HandleFunc("/api/lists/{uuid}", lists.GetListAPI).Methods("GET")
-	router.HandleFunc("/api/lists", lists.CreateListAPI).Methods("POST")
-	router.HandleFunc("/api/lists", lists.UpdateListsAPI).Methods("PUT")
-	router.HandleFunc("/api/lists/{uuid}", lists.DeleteListAPI).Methods("DELETE")
+	router.HandleFunc("/lists", lists.GetAllListsAPI).Methods("GET")
+	router.HandleFunc("/lists/{uuid}", lists.GetListAPI).Methods("GET")
+	router.HandleFunc("/lists", lists.CreateListAPI).Methods("POST")
+	router.HandleFunc("/lists", lists.UpdateListsAPI).Methods("PUT")
+	router.HandleFunc("/lists/{uuid}", lists.DeleteListAPI).Methods("DELETE")
 
 	// Tasks
-	router.HandleFunc("/api/tasks/{uuid}", tasks.GetTaskAPI).Methods("GET")
-	router.HandleFunc("/api/tasks", tasks.CreateTaskAPI).Methods("POST")
-	router.HandleFunc("/api/tasks", tasks.UpdateTasksAPI).Methods("PUT")
-	router.HandleFunc("/api/tasks/{uuid}", tasks.DeleteTaskAPI).Methods("DELETE")
+	router.HandleFunc("/tasks/{uuid}", tasks.GetTaskAPI).Methods("GET")
+	router.HandleFunc("/tasks", tasks.CreateTaskAPI).Methods("POST")
+	router.HandleFunc("/tasks", tasks.UpdateTasksAPI).Methods("PUT")
+	router.HandleFunc("/tasks/{uuid}", tasks.DeleteTaskAPI).Methods("DELETE")
 }

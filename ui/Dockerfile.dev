@@ -10,6 +10,8 @@ RUN npm install
 # Copy code
 COPY . .
 
-# Run dev server
+# Expose port
 EXPOSE 4200
-CMD ["npm", "start", "--", "--host", "0.0.0.0"]
+
+# Run dev server
+CMD ["npm", "start", "--", "--host", "0.0.0.0", "--poll=2000"]
