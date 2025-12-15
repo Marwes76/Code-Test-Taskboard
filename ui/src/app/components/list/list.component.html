@@ -25,6 +25,17 @@
 			{{ list.description }}
 		</p>
 
+		<div style="align-items: center; display: flex;">
+			<button
+				(click)="onToggleTaskOrderBy()"
+				matButton="elevated"
+				*ngIf="!editState.isNew()"
+				style="margin-left: auto; margin-bottom: .5rem;">
+				<mat-icon>{{ orderBy.getOrderByIcon() }}</mat-icon>
+				{{ orderBy.getOrderByString() }}
+			</button>
+		</div>
+
 		<app-task
 			*ngFor="let task of tasks | async; let i = index"
 			[index]="i"

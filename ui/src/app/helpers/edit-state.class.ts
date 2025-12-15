@@ -1,9 +1,9 @@
 export class EditState {
-	static readonly NEW = new EditState('NEW');
-	static readonly DEFAULT = new EditState('DEFAULT');
-	static readonly EDITING = new EditState('EDITING');
-	static readonly SAVING = new EditState('SAVING');
-	static readonly LOCKED = new EditState('LOCKED'); // Locked for other reasons; for example, you might want to lock parent when editing a child
+	static readonly NEW =		new EditState("NEW");
+	static readonly DEFAULT =	new EditState("DEFAULT");
+	static readonly EDITING =	new EditState("EDITING");
+	static readonly SAVING =	new EditState("SAVING");
+	static readonly LOCKED =	new EditState("LOCKED"); // Locked for other reasons; for example, you might want to lock parent when editing a child
 
 	private constructor(public readonly value: string) {}
 

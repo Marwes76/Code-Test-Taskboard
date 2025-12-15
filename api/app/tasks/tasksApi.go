@@ -3,6 +3,7 @@ package tasks
 import (
 	"api/app/communication"
 	"api/app/database"
+	"api/app/search"
 
 	"database/sql"
 	"encoding/json"
@@ -11,6 +12,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	"net/http"
+	"strings"
 )
 
 type TaskRequest struct {
@@ -20,12 +22,78 @@ type TaskRequest struct {
 	SortOrder	uint		`json:"sortOrder"`
 }
 
+func SearchTasksAPI(w http.ResponseWriter, r *http.Request) {
+	var err error
+	var db *sqlx.DB
+	var tasks Tasks
+	listUuid := r.URL.Query().Get("listUuid")
+	orderBy := r.URL.Query().Get("orderBy")
+
+	// Validate
+	if listUuid != "" {
+		if _, err = uuid.Parse(listUuid); err != nil {
+			communication.ResponseBadRequest(w, err)
+			return
+		}
+	}
+	if orderBy != "" {
+		if !search.IsValidOrderBy(orderBy) {
+			communication.ResponseBadRequest(w, errors.New("Invalid orderBy"))
+			return
+		}
+	}
+
+	// Open DB
+	if db, err = database.OpenDB(); err != nil {
+		communication.ResponseInternalServerError(w, err)
+		return
+	}
+	defer db.Close()
+
+	// Build search query
+	var query = "SELECT * FROM tasks"
+	var conditions []string
+	var args []interface{}
+	if listUuid != "" {
+		conditions = append(conditions, "list_uuid = ?")
+		args = append(args, listUuid)
+	}
+	if len(conditions) > 0 {
+		query += " WHERE " + strings.Join(conditions, " AND ")
+	}
+	if orderBy != "" {
+		if search.OrderBy(orderBy) == search.OrderByAlphabetical {
+			query += " ORDER BY title ASC"
+		} else if search.OrderBy(orderBy) == search.OrderBySortOrder {
+			query += " ORDER BY sort_order ASC"
+		} else if search.OrderBy(orderBy) == search.OrderByCreatedAt {
+			query += " ORDER BY created_at ASC"
+		} else if search.OrderBy(orderBy) == search.OrderByUpdatedAt {
+			query += " ORDER BY updated_at ASC"
+		}
+	} else {
+		query += " ORDER BY sort_order ASC"
+	}
+
+	// Search for tasks
+	if err = db.Select(&tasks, query, args...); err != nil {
+		communication.ResponseInternalServerError(w, err)
+		return
+	}
+	if tasks == nil {
+		tasks = Tasks{}
+	}
+
+	communication.ResponseOK(w, tasks)
+}
+
 func GetTaskAPI(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var db *sqlx.DB
 	var task Task
 	reqUuid := mux.Vars(r)["uuid"]
 
+	// Validate
 	if _, err = uuid.Parse(reqUuid); err != nil {
 		communication.ResponseBadRequest(w, err)
 		return
@@ -66,6 +134,8 @@ func CreateTaskAPI(w http.ResponseWriter, r *http.Request) {
 		communication.ResponseBadRequest(w, err)
 		return
 	}
+
+	// Validate
 	if listUuid, err = uuid.Parse(req.ListUuid); err != nil {
 		communication.ResponseBadRequest(w, err)
 		return
@@ -200,6 +270,7 @@ func DeleteTaskAPI(w http.ResponseWriter, r *http.Request) {
 	var tx *sqlx.Tx
 	reqUuid := mux.Vars(r)["uuid"]
 
+	// Validate
 	if _, err = uuid.Parse(reqUuid); err != nil {
 		communication.ResponseBadRequest(w, err)
 		return

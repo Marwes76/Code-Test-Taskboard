@@ -57,6 +57,7 @@ func GetListAPI(w http.ResponseWriter, r *http.Request) {
 	var list List
 	reqUuid := mux.Vars(r)["uuid"]
 
+	// Validate
 	if _, err = uuid.Parse(reqUuid); err != nil {
 		communication.ResponseBadRequest(w, err)
 		return
@@ -238,6 +239,7 @@ func DeleteListAPI(w http.ResponseWriter, r *http.Request) {
 	var tx *sqlx.Tx
 	reqUuid := mux.Vars(r)["uuid"]
 
+	// Validate
 	if _, err = uuid.Parse(reqUuid); err != nil {
 		communication.ResponseBadRequest(w, err)
 		return

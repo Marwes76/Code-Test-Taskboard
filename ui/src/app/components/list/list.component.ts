@@ -4,12 +4,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { List } from '../../models/list.model';
 import { ListService } from '../../services/list.service';
 import { Task } from '../../models/task.model';
+import { TaskService } from '../../services/task.service';
 import { TaskComponent } from '../task/task.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { EditState } from '../../helpers/edit-state.class';
+import { OrderBy } from '../../helpers/search.class';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
@@ -43,12 +45,13 @@ export class ListComponent {
 
 	editableList!: List;
 	editState: EditState = EditState.DEFAULT;
+	orderBy: OrderBy = OrderBy.ALPHABETICAL;
 
 	private tasksSubject = new BehaviorSubject<Task[]>([]);
 	tasks: Observable<Task[]> = this.tasksSubject.asObservable();
 	newTask: Partial<Task> = {};
 
-	constructor(private listService: ListService) {}
+	constructor(private listService: ListService, private taskService: TaskService) {}
 
 	ngOnInit() {
 		const tasks = this.list.tasks.map(t => new Task(t));
@@ -61,6 +64,27 @@ export class ListComponent {
 		}
 
 		this.tasksSubject.next(tasks);
+	}
+
+	onToggleTaskOrderBy() {
+		this.orderBy = OrderBy.toggleOrderBy(this.orderBy);
+		this.onSearch();
+	}
+
+	onSearch() {
+		const params: { [key: string]: string } = {
+			"listUuid": this.list.uuid,
+			"orderBy": this.orderBy.value,
+		};
+		this.taskService.searchTasks(params).subscribe({
+			next: (tasks: Task[]) => {
+				this.tasksSubject.next(tasks);
+				this.lastTaskIndex = tasks.length - 1;
+			},
+			error: (err: HttpErrorResponse) => {
+				console.error('Failed to get tasks', err);
+			}
+		});
 	}
 
 	onEdit() {
