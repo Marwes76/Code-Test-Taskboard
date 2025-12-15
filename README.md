@@ -15,10 +15,10 @@ In the user interface, press the plus-sign to create your first list, and then c
 
 ---
 
-### TODO
+### TODO:
 
 #### api service:
-- [ ] Move "CREATE TABLE"-scripts from db and make proper migrations
+- [ ] Move "CREATE TABLE"-scripts from db service and make proper migrations
 - [ ] Make generic db-functions where you can just plug in db-table and data model
 
 #### ui service:
