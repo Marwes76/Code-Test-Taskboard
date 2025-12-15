@@ -15,8 +15,8 @@ type Task struct {
 	UpdatedAt	time.Time	`json:"updatedAt" db:"updated_at"`
 }
 
-// Alias for slice of lists
+// Alias for slice of tasks
 type Tasks []Task
 
-// Alias for map of lists indexed by UUID
+// Alias for map of tasks indexed by UUID
 type TasksMap map[string]Task
