@@ -1,15 +1,15 @@
 # Code Test Taskboard
 
-This project is built with a Golang backend, Angular frontend, MySQL database, and deployed using Docker.
+This project is built with a Golang backend (**"api"** service), Angular frontend (**"ui"** service), MySQL database (**"db"** service), and deployed using Docker.
 
 To build and run the project, run the command `docker-compose -f docker-compose.dev.yml up --build`.
 
+To deploy changes to the **api** service, run `docker-compose -f docker-compose.dev.yml up -d --build api` from another command line.
+
+The **ui** service is automatically reloaded in response to changes.
+
 - UI is located at http://localhost:4200
 - A simple web interface for DB is located at http://localhost:8081 (login with user `app`, password `app`, database `code_test_taskboard`)
-
-To deploy changes to API, run `docker-compose -f docker-compose.dev.yml up -d --build api` from another command line.
-
-UI is automatically reloaded in response to changes.
 
 In the UI, press the plus-sign to create your first list, and then create new tasks by pressing the plus-sign within the list.
 
@@ -17,11 +17,11 @@ In the UI, press the plus-sign to create your first list, and then create new ta
 
 ### TODO
 
-#### API:
+#### api service:
 - [ ] Move "CREATE TABLE"-scripts from db and make proper migrations
 - [ ] Make generic db-functions where you can just plug in db-table and data model
 
-#### UI:
+#### ui service:
 - [ ] Fix bug where tasks can't be moved between lists
 - [ ] Drag-and-drop
 - [ ] Localization
