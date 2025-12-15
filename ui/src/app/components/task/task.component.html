@@ -2,7 +2,21 @@
 
 	<div *ngIf="editState.isLocked() || editState.isDefault()">
 		<div style="align-items: center; display: flex;">
+			<button
+				(click)="onMoveLeft()"
+				[disabled]="isFirstList"
+				matButton="tonal"
+				style="margin-right: auto;">
+				<mat-icon>arrow_back</mat-icon>
+			</button>
 			<strong>{{ task.title }}</strong>
+			<button
+				(click)="onMoveRight()"
+				[disabled]="isLastList"
+				matButton="tonal"
+				style="margin-left: auto;">
+				<mat-icon>arrow_forward</mat-icon>
+			</button>
 		</div>
 
 		<p style="margin-bottom: 2rem;">
@@ -13,7 +27,7 @@
 	<div *ngIf="!editState.isLocked() && !editState.isDefault()">
 		<form>
 			<mat-form-field style="width: 100%;">
-				<mat-label>Title</mat-label>
+				<mat-label>Task Title</mat-label>
 				<input
 					matInput
 					name="title"
@@ -35,31 +49,32 @@
 		<button
 			(click)="onEdit()"
 			[disabled]="editState.isLocked()"
-			matButton="filled"
+			matButton="tonal"
 			*ngIf="editState.isDefault()">
 			Edit
 		</button>
 		<button
 			(click)="onSave()"
 			[disabled]="editState.isSaving()"
-			matButton="filled"
+			matButton="tonal"
 			*ngIf="editState.isNew() || editState.isEditing() || editState.isSaving()">
 			Save
 		</button>
 		<button
 			(click)="onCancel()"
 			[disabled]="editState.isSaving()"
-			matButton="filled"
+			matButton="tonal"
 			*ngIf="editState.isNew() || editState.isEditing() || editState.isSaving()">
 			Cancel
 		</button>
 		<button
 			(click)="onDelete()"
 			[disabled]="editState.isEditing() || editState.isSaving()"
-			matButton="filled"
+			matButton="tonal"
 			*ngIf="!editState.isNew()"
 			style="margin-left: auto;">
 			<mat-icon>delete</mat-icon>
 		</button>
 	</div>
 </div>
+

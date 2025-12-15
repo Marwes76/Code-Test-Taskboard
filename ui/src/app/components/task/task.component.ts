@@ -27,11 +27,14 @@ import { FormsModule } from '@angular/forms';
 })
 export class TaskComponent {
 	@Input() index!: number;
-	@Input() lastIndex!: number;
 	@Input() task!: Task;
 	@Input() listUuid!: string;
+	@Input() isFirstList!: boolean;
+	@Input() isLastList!: boolean;
 	@Output() moveUp = new EventEmitter<number>();
 	@Output() moveDown = new EventEmitter<number>();
+	@Output() moveLeft = new EventEmitter<number>();
+	@Output() moveRight = new EventEmitter<number>();
 	@Output() update = new EventEmitter<{index: number; task: Task}>();
 	@Output() delete = new EventEmitter<number>();
 
@@ -52,12 +55,12 @@ export class TaskComponent {
 		this.editState = EditState.EDITING;
 	}
 
-	onMoveUp() {
-		this.moveUp.emit(this.index);
+	onMoveLeft() {
+		this.moveLeft.emit(this.index);
 	}
 
-	onMoveDown() {
-		this.moveDown.emit(this.index);
+	onMoveRight() {
+		this.moveRight.emit(this.index);
 	}
 
 	onSave() {

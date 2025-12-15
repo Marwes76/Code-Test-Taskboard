@@ -136,7 +136,6 @@ func UpdateTasksAPI(w http.ResponseWriter, r *http.Request) {
 	// Since we're only dealing with very little data, we do one UPDATE-query at a time, but for the future we might want to
 	// scale it up to a more flexible query that can handle multiple rows
 	var result sql.Result
-	var rowsAffected int64
 	var query string
 	var args []interface{}
 	if tx, err = db.Beginx(); err != nil {
@@ -160,14 +159,9 @@ func UpdateTasksAPI(w http.ResponseWriter, r *http.Request) {
 			communication.ResponseInternalServerError(w, err)
 			return
 		}
-		if rowsAffected, err = result.RowsAffected(); err != nil {
+		if _, err = result.RowsAffected(); err != nil {
 			tx.Rollback()
 			communication.ResponseInternalServerError(w, err)
-			return
-		}
-		if rowsAffected == 0 {
-			tx.Rollback()
-			communication.ResponseNotFound(w)
 			return
 		}
 	}

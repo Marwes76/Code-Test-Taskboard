@@ -4,7 +4,7 @@
 		<div style="align-items: center; display: flex;">
 			<button
 				(click)="onMoveUp()"
-				[disabled]="index == 0"
+				[disabled]="isFirstList"
 				matButton="filled"
 				style="margin-right: auto;">
 				<mat-icon>arrow_back</mat-icon>
@@ -14,7 +14,7 @@
 			</h3>
 			<button
 				(click)="onMoveDown()"
-				[disabled]="index >= lastIndex"
+				[disabled]="isLastList"
 				matButton="filled"
 				style="margin-left: auto;">
 				<mat-icon>arrow_forward</mat-icon>
@@ -28,11 +28,12 @@
 		<app-task
 			*ngFor="let task of tasks | async; let i = index"
 			[index]="i"
-			[lastIndex]="lastTaskIndex"
 			[task]="task"
 			[listUuid]="list.uuid"
-			(moveUp)="moveUpTaskAtIndex($event)"
-			(moveDown)="moveDownTaskAtIndex($event)"
+			[isFirstList]="isFirstList"
+			[isLastList]="isLastList"
+			(moveLeft)="moveTaskLeftAtIndex($event)"
+			(moveRight)="moveTaskRightAtIndex($event)"
 			(update)="updateTaskAtIndex($event.index, $event.task)"
 			(delete)="deleteTaskAtIndex($event)">
 		</app-task>
@@ -51,7 +52,7 @@
 	<div *ngIf="!editState.isLocked() && !editState.isDefault()">
 		<form>
 			<mat-form-field style="width: 100%;">
-				<mat-label>Title</mat-label>
+				<mat-label>List Title</mat-label>
 				<input
 					matInput
 					name="title"

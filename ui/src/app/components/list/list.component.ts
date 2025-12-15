@@ -31,19 +31,21 @@ import { FormsModule } from '@angular/forms';
 
 export class ListComponent {
 	@Input() index!: number;
-	@Input() lastIndex!: number;
 	@Input() list!: List;
+	@Input() isFirstList!: boolean;
+	@Input() isLastList!: boolean;
 	@Output() moveUp = new EventEmitter<number>();
 	@Output() moveDown = new EventEmitter<number>();
 	@Output() update = new EventEmitter<{index: number; list: List}>();
 	@Output() delete = new EventEmitter<number>();
+	@Output() moveTaskLeft = new EventEmitter<{index: number; task: Task}>();
+	@Output() moveTaskRight = new EventEmitter<{index: number; task: Task}>();
 
 	editableList!: List;
 	editState: EditState = EditState.DEFAULT;
 
 	private tasksSubject = new BehaviorSubject<Task[]>([]);
 	tasks: Observable<Task[]> = this.tasksSubject.asObservable();
-	lastTaskIndex: number = 0;
 	newTask: Partial<Task> = {};
 
 	constructor(private listService: ListService) {}
@@ -59,29 +61,6 @@ export class ListComponent {
 		}
 
 		this.tasksSubject.next(tasks);
-		this.lastTaskIndex = tasks.length - 1;
-	}
-
-	onAddTask() {
-		const task = new Task({
-			sortOrder: this.tasksSubject.value.length
-		});
-		const tasks = [ ...this.tasksSubject.value, task ];
-		this.tasksSubject.next(tasks);
-		this.lastTaskIndex = tasks.length - 1;
-	}
-
-	updateTaskAtIndex(index: number, task: Task) {
-		const tasks = [ ...this.tasksSubject.value ];
-		tasks[index] = task;
-		this.tasksSubject.next(tasks);
-	}
-
-	deleteTaskAtIndex(index: number) {
-		const tasks = [ ...this.tasksSubject.value ];
-		tasks.splice(index, 1);
-		this.tasksSubject.next(tasks);
-		this.lastTaskIndex = tasks.length - 1;
 	}
 
 	onEdit() {
@@ -157,5 +136,37 @@ export class ListComponent {
 		});
 
 		this.editState = EditState.DEFAULT;
+	}
+
+	onAddTask() {
+		const task = new Task({
+			sortOrder: this.tasksSubject.value.length
+		});
+		const tasks = [ ...this.tasksSubject.value, task ];
+		this.tasksSubject.next(tasks);
+	}
+
+	moveTaskLeftAtIndex(index: number) {
+		const tasks = [ ...this.tasksSubject.value ];
+		var task = tasks[index];
+		this.moveTaskLeft.emit({index: this.index, task: task});
+	}
+
+	moveTaskRightAtIndex(index: number) {
+		const tasks = [ ...this.tasksSubject.value ];
+		var task = tasks[index];
+		this.moveTaskRight.emit({index: this.index, task: task});
+	}
+
+	updateTaskAtIndex(index: number, task: Task) {
+		const tasks = [ ...this.tasksSubject.value ];
+		tasks[index] = task;
+		this.tasksSubject.next(tasks);
+	}
+
+	deleteTaskAtIndex(index: number) {
+		const tasks = [ ...this.tasksSubject.value ];
+		tasks.splice(index, 1);
+		this.tasksSubject.next(tasks);
 	}
 }

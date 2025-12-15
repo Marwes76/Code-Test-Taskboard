@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { List } from '../../models/list.model';
 import { ListService } from '../../services/list.service';
 import { ListComponent } from '../list/list.component';
+import { Task } from '../../models/task.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -24,13 +25,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class BoardComponent {
 	private listsSubject = new BehaviorSubject<List[]>([]);
 	lists: Observable<List[]> = this.listsSubject.asObservable();
-	lastListIndex: number = 0;
 	newList: Partial<List> = {};
 
 	constructor(private listService: ListService) {
 		this.listService.getAllLists().subscribe(lists => {
 			this.listsSubject.next(lists);
-			this.lastListIndex = lists.length - 1;
 		});
 	}
 
@@ -40,10 +39,9 @@ export class BoardComponent {
 		});
 		const lists = [ ...this.listsSubject.value, list ];
 		this.listsSubject.next(lists);
-		this.lastListIndex = lists.length - 1;
 	}
 
-	moveUpListAtIndex(index: number) {
+	moveListUpAtIndex(index: number) {
 		const lists = [ ...this.listsSubject.value ];
 		var list = lists[index];
 		var priorList = lists[index - 1];
@@ -69,7 +67,7 @@ export class BoardComponent {
 		});
 	}
 
-	moveDownListAtIndex(index: number) {
+	moveListDownAtIndex(index: number) {
 		const lists = [ ...this.listsSubject.value ];
 		var list = lists[index];
 		var nextList = lists[index + 1];
@@ -105,6 +103,27 @@ export class BoardComponent {
 		const lists = [ ...this.listsSubject.value ];
 		lists.splice(index, 1);
 		this.listsSubject.next(lists);
-		this.lastListIndex = lists.length - 1;
+	}
+
+	moveTaskLeftInList(index: number, task: Task) {
+		const lists = [ ...this.listsSubject.value ];
+		var priorList = lists[index - 1];
+		task.listUuid = priorList.uuid;
+
+		var priorTasks = priorList.tasks.map(t => new Task(t));
+		task.sortOrder = priorTasks.length;
+
+		// TODO: We're not reaching here, but we should send request to update task
+	}
+
+	moveTaskRightInList(index: number, task: Task) {
+		const lists = [ ...this.listsSubject.value ];
+		var nextList = lists[index + 1];
+		task.listUuid = nextList.uuid;
+
+		var nextTasks = nextList.tasks.map(t => new Task(t));
+		task.sortOrder = nextTasks.length;
+
+		// TODO: We're not reaching here, but we should send request to update task
 	}
 }

@@ -1,13 +1,16 @@
 <div class="board">
 	<app-list
-		*ngFor="let list of lists | async; let i = index"
+		*ngFor="let list of lists | async; let i = index; let isLastList = last"
 		[index]="i"
-		[lastIndex]="lastListIndex"
 		[list]="list"
-		(moveUp)="moveUpListAtIndex($event)"
-		(moveDown)="moveDownListAtIndex($event)"
+		[isFirstList]="i === 0"
+		[isLastList]="isLastList"
+		(moveUp)="moveListUpAtIndex($event)"
+		(moveDown)="moveListDownAtIndex($event)"
 		(update)="updateListAtIndex($event.index, $event.list)"
 		(delete)="deleteListAtIndex($event)">
+		(moveTaskLeft)="moveTaskLeftInList($event.index, $event.task)"
+		(moveTaskRight)="moveTaskRightInList($event.index, $event.task)"
 	</app-list>
 
 	<div
