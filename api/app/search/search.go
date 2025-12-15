@@ -3,15 +3,15 @@ package search
 type OrderBy string
 
 const (
-	OrderByAlphabetical	OrderBy =	"ALPHABETICAL"
 	OrderBySortOrder	OrderBy =	"SORT_ORDER"
+	OrderByAlphabetical	OrderBy =	"ALPHABETICAL"
 	OrderByCreatedAt	OrderBy =	"CREATED_AT"
 	OrderByUpdatedAt	OrderBy =	"UPDATED_AT"
 )
 
 var validOrderByValues = map[OrderBy]struct{}{
-	OrderByAlphabetical:	{},
 	OrderBySortOrder:	{},
+	OrderByAlphabetical:	{},
 	OrderByCreatedAt:	{},
 	OrderByUpdatedAt:	{},
 }

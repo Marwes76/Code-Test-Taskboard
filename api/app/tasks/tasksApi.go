@@ -62,14 +62,14 @@ func SearchTasksAPI(w http.ResponseWriter, r *http.Request) {
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
 	if orderBy != "" {
-		if search.OrderBy(orderBy) == search.OrderByAlphabetical {
-			query += " ORDER BY title ASC"
-		} else if search.OrderBy(orderBy) == search.OrderBySortOrder {
+		if search.OrderBy(orderBy) == search.OrderBySortOrder {
 			query += " ORDER BY sort_order ASC"
+		} else if search.OrderBy(orderBy) == search.OrderByAlphabetical {
+			query += " ORDER BY title ASC"
 		} else if search.OrderBy(orderBy) == search.OrderByCreatedAt {
-			query += " ORDER BY created_at ASC"
+			query += " ORDER BY created_at DESC"
 		} else if search.OrderBy(orderBy) == search.OrderByUpdatedAt {
-			query += " ORDER BY updated_at ASC"
+			query += " ORDER BY updated_at DESC"
 		}
 	} else {
 		query += " ORDER BY sort_order ASC"
