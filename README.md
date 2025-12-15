@@ -8,7 +8,7 @@ To deploy changes to the **api** service, run `docker-compose -f docker-compose.
 
 The **ui** service is automatically reloaded in response to changes.
 
-- UI is located at http://localhost:4200
+- User interface is located at http://localhost:4200
 - A simple web interface for DB is located at http://localhost:8081 (login with user `app`, password `app`, database `code_test_taskboard`)
 
 In the UI, press the plus-sign to create your first list, and then create new tasks by pressing the plus-sign within the list.
