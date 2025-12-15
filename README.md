@@ -5,7 +5,7 @@ This project is built with a Golang backend, Angular frontend, MySQL database, a
 To build and run the project, run the command `docker-compose -f docker-compose.dev.yml up --build`.
 
 - UI is located at http://localhost:4200
-- Web interface for DB is located at http://localhost:8081 (login with user `app`, password `app`, database `code_test_taskboard`)
+- A simple web interface for DB is located at http://localhost:8081 (login with user `app`, password `app`, database `code_test_taskboard`)
 
 To deploy changes to API, run `docker-compose -f docker-compose.dev.yml up -d --build api` from another command line.
 
