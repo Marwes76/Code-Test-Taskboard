@@ -6,7 +6,7 @@ To build and run the project, run the command `docker-compose -f docker-compose.
 
 To deploy changes to the **api** service, run `docker-compose -f docker-compose.dev.yml up -d --build api` from another command line.
 
-The **ui** service is automatically reloaded in response to changes.
+The **ui** service is automatically reloaded in response to changes to any of the source files.
 
 - User interface is located at http://localhost:4200
 - A simple web interface for DB is located at http://localhost:8081 (login with user `app`, password `app`, database `code_test_taskboard`)
@@ -22,13 +22,13 @@ In the user interface, press the plus-sign to create your first list, and then c
 - [ ] Make generic db-functions where you can just plug in db-table and data model
 
 #### ui service:
-- [ ] Fix bug where tasks can't be moved between lists
 - [ ] Drag-and-drop
 - [ ] Localization
 - [ ] Make reusable component for edit/save/delete buttons
 - [ ] Alerts for when HTTP-requests go through/fail
 - [ ] Lock tasks instead if hiding them altogether when editing parent list
 - [ ] Confirmation modals when deleting data
+- [ ] Read apiUrl in config.json from environment variable
 
 #### General:
 - [ ] sortOrder needs to be normalized/adjusted when lists/tasks are moved/removed

@@ -5,6 +5,7 @@ import { List } from '../../models/list.model';
 import { ListService } from '../../services/list.service';
 import { ListComponent } from '../list/list.component';
 import { Task } from '../../models/task.model';
+import { TaskService } from '../../services/task.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -27,7 +28,7 @@ export class BoardComponent {
 	lists: Observable<List[]> = this.listsSubject.asObservable();
 	newList: Partial<List> = {};
 
-	constructor(private listService: ListService) {
+	constructor(private listService: ListService, private taskService: TaskService) {
 		this.listService.getAllLists().subscribe(lists => {
 			this.listsSubject.next(lists);
 		});
@@ -113,7 +114,29 @@ export class BoardComponent {
 		var priorTasks = priorList.tasks.map(t => new Task(t));
 		task.sortOrder = priorTasks.length;
 
-		// TODO: We're not reaching here, but we should send request to update task
+		const tasks: { [uuid: string]: Task } = { [task.uuid] : task};
+		this.taskService.updateTasks(tasks).subscribe({
+			next: (tasks: { [uuid: string]: Task }) => {
+				const updatedTask = tasks[task.uuid];
+				if (updatedTask !== undefined) {
+					// We keep things simple and just reload all lists for now
+					this.listService.getAllLists().subscribe({
+						next: (lists: List[]) => {
+							this.listsSubject.next(lists);
+						},
+						error: (err: HttpErrorResponse) => {
+							console.error('Failed to get lists', err);
+						}
+					});
+				} else {
+					console.error('Failed to update task');
+				}
+			},
+			error: (err: HttpErrorResponse) => {
+				console.error('Failed to update task', err);
+			}
+		});
+
 	}
 
 	moveTaskRightInList(index: number, task: Task) {
@@ -124,6 +147,27 @@ export class BoardComponent {
 		var nextTasks = nextList.tasks.map(t => new Task(t));
 		task.sortOrder = nextTasks.length;
 
-		// TODO: We're not reaching here, but we should send request to update task
+		const tasks: { [uuid: string]: Task } = { [task.uuid] : task};
+		this.taskService.updateTasks(tasks).subscribe({
+			next: (tasks: { [uuid: string]: Task }) => {
+				const updatedTask = tasks[task.uuid];
+				if (updatedTask !== undefined) {
+					// We keep things simple and just reload all lists for now
+					this.listService.getAllLists().subscribe({
+						next: (lists: List[]) => {
+							this.listsSubject.next(lists);
+						},
+						error: (err: HttpErrorResponse) => {
+							console.error('Failed to get lists', err);
+						}
+					});
+				} else {
+					console.error('Failed to update tasks');
+				}
+			},
+			error: (err: HttpErrorResponse) => {
+				console.error('Failed to update task', err);
+			}
+		});
 	}
 }

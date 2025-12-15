@@ -215,15 +215,21 @@ func UpdateTasksAPI(w http.ResponseWriter, r *http.Request) {
 
 	taskUuids := make([]string, len(reqs))
 	for reqUuid, req := range reqs {
+		// Validate
 		if _, err = uuid.Parse(reqUuid); err != nil {
+			tx.Rollback()
+			communication.ResponseBadRequest(w, err)
+			return
+		}
+		if _, err = uuid.Parse(req.ListUuid); err != nil {
 			tx.Rollback()
 			communication.ResponseBadRequest(w, err)
 			return
 		}
 
 		taskUuids = append(taskUuids, reqUuid)
-		query = "UPDATE tasks SET title = ?, description = ?, sort_order = ? WHERE uuid = ?"
-		args = []interface{}{req.Title, req.Description, req.SortOrder, reqUuid}
+		query = "UPDATE tasks SET list_uuid = ?, title = ?, description = ?, sort_order = ? WHERE uuid = ?"
+		args = []interface{}{req.ListUuid, req.Title, req.Description, req.SortOrder, reqUuid}
 		if result, err = tx.Exec(query, args...); err != nil {
 			tx.Rollback()
 			communication.ResponseInternalServerError(w, err)

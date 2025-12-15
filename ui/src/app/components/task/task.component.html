@@ -2,7 +2,6 @@
 
 	<div *ngIf="editState.isLocked() || editState.isDefault()">
 		<div style="align-items: center; display: flex;">
-			<!-- hidden until moveTaskLeftInList in BoardComponent is fixed
 			<button
 				(click)="onMoveLeft()"
 				[disabled]="isFirstList"
@@ -10,9 +9,7 @@
 				style="margin-right: auto;">
 				<mat-icon>arrow_back</mat-icon>
 			</button>
-			-->
 			<strong style="margin: auto;">{{ task.title }}</strong>
-			<!-- hidden until moveTaskRightInList in BoardComponent is fixed
 			<button
 				(click)="onMoveRight()"
 				[disabled]="isLastList"
@@ -20,7 +17,6 @@
 				style="margin-left: auto;">
 				<mat-icon>arrow_forward</mat-icon>
 			</button>
-			-->
 		</div>
 
 		<p style="margin-bottom: 2rem;">

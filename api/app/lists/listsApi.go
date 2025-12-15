@@ -178,6 +178,7 @@ func UpdateListsAPI(w http.ResponseWriter, r *http.Request) {
 
 	listUuids := make([]string, len(reqs))
 	for reqUuid, req := range reqs {
+		// Validate
 		if _, err = uuid.Parse(reqUuid); err != nil {
 			tx.Rollback()
 			communication.ResponseBadRequest(w, err)

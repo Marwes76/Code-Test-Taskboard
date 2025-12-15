@@ -68,10 +68,10 @@ export class ListComponent {
 
 	onToggleTaskOrderBy() {
 		this.orderBy = OrderBy.toggleOrderBy(this.orderBy);
-		this.onSearch();
+		this.onTaskSearch();
 	}
 
-	onSearch() {
+	onTaskSearch() {
 		const params: { [key: string]: string } = {
 			"listUuid": this.list.uuid,
 			"orderBy": this.orderBy.value,
