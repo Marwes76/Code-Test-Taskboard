@@ -79,7 +79,6 @@ export class ListComponent {
 		this.taskService.searchTasks(params).subscribe({
 			next: (tasks: Task[]) => {
 				this.tasksSubject.next(tasks);
-				this.lastTaskIndex = tasks.length - 1;
 			},
 			error: (err: HttpErrorResponse) => {
 				console.error('Failed to get tasks', err);
