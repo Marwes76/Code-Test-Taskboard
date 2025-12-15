@@ -1,5 +1,7 @@
 # Code Test Taskboard
 
+This project is built with a Golang backend, Angular frontend, MySQL database, and deployed using Docker.
+
 To build and run the project, run the command `docker-compose -f docker-compose.dev.yml up --build`.
 
 - API is located at http://localhost:8080
