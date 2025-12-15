@@ -51,6 +51,10 @@ export class TaskComponent {
 		}
 	}
 
+	formatDate(date: string) {
+		return new Date(date).toLocaleString();
+	}
+
 	onEdit() {
 		this.editState = EditState.EDITING;
 	}
