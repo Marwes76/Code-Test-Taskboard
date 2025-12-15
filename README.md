@@ -11,7 +11,7 @@ The **ui** service is automatically reloaded in response to changes.
 - User interface is located at http://localhost:4200
 - A simple web interface for DB is located at http://localhost:8081 (login with user `app`, password `app`, database `code_test_taskboard`)
 
-In the UI, press the plus-sign to create your first list, and then create new tasks by pressing the plus-sign within the list.
+In the user interface, press the plus-sign to create your first list, and then create new tasks by pressing the plus-sign within the list.
 
 ---
 
