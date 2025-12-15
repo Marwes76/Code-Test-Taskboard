@@ -45,7 +45,7 @@ export class ListComponent {
 
 	editableList!: List;
 	editState: EditState = EditState.DEFAULT;
-	orderBy: OrderBy = OrderBy.ALPHABETICAL;
+	orderBy: OrderBy = OrderBy.SORT_ORDER;
 
 	private tasksSubject = new BehaviorSubject<Task[]>([]);
 	tasks: Observable<Task[]> = this.tasksSubject.asObservable();
