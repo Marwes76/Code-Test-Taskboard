@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package and download dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy code
+COPY . .
+
+# Run dev server
+EXPOSE 4200
+CMD ["npm", "start", "--", "--host", "0.0.0.0"]

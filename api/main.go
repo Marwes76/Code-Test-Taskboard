@@ -11,19 +11,12 @@ import (
 )
 
 func main() {
-	var err error
-
-	// Load relevant environment variables
-	if err = config.LoadEnv(); err != nil {
-		log.Fatal(err.Error())
-	}
-	port := config.GetEnvPort()
-
 	// Setup router
 	router := mux.NewRouter().StrictSlash(true)
 	routes.InitRoutes(router)
 	corsRouter := middleware.CORS(router)
 
 	// Run server
+	port := config.GetEnvApiPort()
 	log.Fatal(http.ListenAndServe(port, corsRouter))
 }
